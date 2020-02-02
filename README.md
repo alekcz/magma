@@ -1,14 +1,30 @@
 # magma
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure library to back up your Firestore to Google Storage
 
 ## Usage
 
-FIXME
+```clojure 
+(list-firestore-backups)
+(list-firestore-backups "project-id")
+
+(last-firestore-backup)
+(last-firestore-backup "project-id")
+
+(backup-firestore)
+(backup-firestore "gs://bucket-name")
+(backup-firestore "project-id" "gs://bucket-name")
+
+(restore-firestore "gs://bucket-name/yyyy-MM-ddTHH:mm:ss.SSS")
+(restore-firestore "project-id" "gs://bucket-name/yyyy-MM-ddTHH:mm:ss.SSS")
+
+(roll-back-firestore) ;for your safety magma waits 60 seconds before starting the roll back
+(roll-back-firestore "project-id") ;for your safety magma waits 60 seconds before starting the roll back
+```
 
 ## License
 
-Copyright © 2020 FIXME
+Copyright © 2020 Alexander Oloo
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at

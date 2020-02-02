@@ -118,9 +118,11 @@
 (defn roll-back-firestore 
   ([]
     (let [uri (:uri (last-firestore-backup (.getProjectId (g/load-credentials))))]
+      (Thread/sleep 60000)
       (restore-firestore uri)))
   ([project-id]
     (let [uri (:uri (last-firestore-backup project-id))]
+      (Thread/sleep 60000)
       (restore-firestore uri))))
 
 ;(into-array Storage$BucketTargetOption [])
