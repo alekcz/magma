@@ -4,7 +4,7 @@ A Clojure library to back up your Firestore to Google Storage
 
 ## Usage
 
-All magma functions have multiple arities for convenience and to be CI/CD friendly. 
+All (except one) `magma` functions have multiple arities for convenience and to be CI/CD friendly. 
 
 Whenever the `project-id` is omitted as an argument `magma` uses the `project-id` in the Google Credentials.
 `magma` uses [alekcz/google-credentials](https://github.com/alekcz/google-credentials) to load Google Credentials from the `GOOGLE_APPLICATION_CREDENTIALS`
@@ -14,21 +14,37 @@ Whenever the `project-id` is omitted as an argument `magma` uses the `project-id
 
 [alekcz/magma "0.1.0"]
 
-(list-firestore-backups)
-(list-firestore-backups "project-id")
+(require '[magma.core :as magma])
 
-(last-firestore-backup)
-(last-firestore-backup "project-id")
 
-(backup-firestore)
-(backup-firestore "gs://bucket-name")
-(backup-firestore "project-id" "gs://bucket-name")
+(magma/create-backup-bucket)
+(magma/create-backup-bucket "project-id")
+;by default the root is called magma-<project-id>. 
+;The bucket is called named after the root
 
-(restore-firestore "gs://bucket-name/yyyy-MM-ddTHH:mm:ss.SSS")
-(restore-firestore "project-id" "gs://bucket-name/yyyy-MM-ddTHH:mm:ss.SSS")
+(magma/list-firestore-backups)
+(magma/list-firestore-backups "project-id")
 
-(roll-back-firestore) ;for your safety magma waits 60 seconds before starting the roll back
-(roll-back-firestore "project-id") ;for your safety magma waits 60 seconds before starting the roll back
+(magma/last-firestore-backup)
+(magma/last-firestore-backup "project-id")
+
+(magma/backup-firestore)
+(magma/backup-firestore "gs://bucket-name")
+(magma/backup-firestore "project-id" "gs://bucket-name")
+
+(magma/restore-firestore "gs://bucket-name/yyyy-MM-ddTHH:mm:ss.SSS")
+(magma/restore-firestore "project-id" "gs://bucket-name/yyyy-MM-ddTHH:mm:ss.SSS")
+
+(magma/roll-back-firestore) ;for your safety magma waits 60 seconds before starting the roll back
+(magma/roll-back-firestore "project-id") ;for your safety magma waits 60 seconds before starting the roll back
+
+(magma/deleting-your-backups-is-a-really-bad-idea "yyyy-MM-ddTHH:mm:ss_SSS")
+(magma/deleting-your-backups-is-a-really-bad-idea "project-id" "yyyy-MM-ddTHH:mm:ss_SSS")
+
+;Renaming the root
+(magma/rename-root "namespace")
+; The root is now magma-namespace-<project-id>
+; This function primarily exists to enable testing
 ```
 
 I'm currently using `magma` to backup my DB just before I deploy a change to my production API.

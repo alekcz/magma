@@ -5,12 +5,12 @@
             [clj-uuid :as uuid]))
 
 (def short-wait 5000)
-(def long-wait 10000)
+(def long-wait 30000)
 
 (defn fixture [f]
 	(let [prefix (uuid/v1)
         project-id (.getProjectId (g/load-credentials))
-        _ (magma/set-prefix prefix)]
+        _ (magma/rename-root prefix)]
     (magma/create-backup-bucket)
 	  (f)
     (Thread/sleep long-wait)

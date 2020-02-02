@@ -106,8 +106,11 @@
     (doseq [file contents]
       (.delete (storage) (:id file) (into-array Storage$BlobSourceOption [])))))                              
 
-(defn create-backup-bucket []
-  (let [project-id (.getProjectId (g/load-credentials))]
+(defn create-backup-bucket 
+  ([]
+    (let [project-id (.getProjectId (g/load-credentials))]
+      (.create (storage) (bucket-info (str @root project-id)) (into-array Storage$BucketTargetOption []))))
+  ([project-id]
     (.create (storage) (bucket-info (str @root project-id)) (into-array Storage$BucketTargetOption []))))
 
 (defn deleting-your-backup-bucket-is-an-extremely-bad-idea  []
@@ -118,7 +121,7 @@
       (Thread/sleep 5000)
       (.delete (storage) (str @root project-id) (into-array Storage$BucketSourceOption [])))))
 
-(defn set-prefix [prefix]
+(defn rename-root [prefix]
   (let [clean-prefix (clojure.string/replace (str prefix) #"[!@#$%^&*\\\/]" "")]
     (reset! root (str "magma-" clean-prefix "-"))))
 
