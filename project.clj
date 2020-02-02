@@ -13,7 +13,6 @@
                   [io.grpc/grpc-api "1.22.1"]
                   [io.grpc/grpc-core "1.22.1" :exclusions [com.google.errorprone/error_prone_annotations io.grpc/grpc-api]]
                   [com.google.cloud/google-cloud-storage "1.22.0" :exclusions [io.grpc/grpc-netty-shaded io.grpc/grpc-core io.grpc/grpc-api]]
-                  [com.google.cloud/google-cloud-firestore "1.32.2" :exclusions [io.grpc/grpc-netty-shaded io.grpc/grpc-core io.grpc/grpc-api]]
-                  
+                  [com.google.cloud/google-cloud-firestore "1.32.2" :exclusions [io.grpc/grpc-netty-shaded io.grpc/grpc-core io.grpc/grpc-api]]                  
                   [tick "0.4.23-alpha"]]
   :repl-options {:init-ns magma.core})
