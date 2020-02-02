@@ -9,8 +9,12 @@
                   [com.google.cloud/google-cloud-storage "1.22.0"]
                   [com.google.cloud/google-cloud-firestore "1.32.2" 
                     :exclusions [io.grpc/grpc-netty-shaded io.grpc/grpc-core io.grpc/grpc-api]]                  
-                  [io.grpc/grpc-netty-shaded "1.27.0" :exclusions [io.grpc/grpc-core io.grpc/grpc-api]]
-                  [io.grpc/grpc-core "1.27.0" :exclusions [io.grpc/grpc-api]]
+                  [io.grpc/grpc-netty-shaded "1.27.0" 
+                    :exclusions [io.grpc/grpc-core io.grpc/grpc-api]]
+                  [io.grpc/grpc-core "1.27.0" 
+                    :exclusions [io.grpc/grpc-api]]
                   [io.grpc/grpc-api "1.27.0"]
-                  [tick "0.4.23-alpha"]]
-  :repl-options {:init-ns magma.core})
+                  [tick "0.4.23-alpha"]
+                  [danlentz/clj-uuid "0.1.9"]]
+  :repl-options {:init-ns magma.core}
+  :plugins  [[lein-cloverage "1.1.2"]])

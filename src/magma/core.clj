@@ -5,10 +5,14 @@
   (:import 	;storage bucket
             com.google.cloud.storage.Bucket
             com.google.cloud.storage.BucketInfo
+            com.google.cloud.storage.Blob
+            com.google.cloud.storage.BlobId
             com.google.cloud.storage.Storage$BucketTargetOption
             com.google.cloud.storage.Storage
             com.google.cloud.storage.StorageOptions
             com.google.cloud.storage.Storage$BlobListOption
+            com.google.cloud.storage.Storage$BucketSourceOption
+            com.google.cloud.storage.Storage$BlobSourceOption
             ;firestore
             com.google.firestore.admin.v1.DatabaseName
             com.google.longrunning.Operation
@@ -22,7 +26,7 @@
 
 (t/zone "Africa/Johannesburg")
 
-(def root "magma-")
+(def root (atom "magma-"))
 
 (defn- storage ^Storage [] 
   (-> (. StorageOptions newBuilder)
@@ -52,10 +56,6 @@
 
 (defn- bucket-info ^BucketInfo [name] (BucketInfo/of name))
 
-(defn- create-backup-bucket []
-  (let [project (.getProjectId (g/load-credentials))]
-    (.create (storage) (bucket-info (str root project)) (into-array Storage$BucketTargetOption []))))
-
 (defn- make-timestamp [folder-name] 
   (-> folder-name
     (clojure.string/replace #"/(?!.*\1)" "")
@@ -77,15 +77,50 @@
       (catch Exception e (str "Caught exception: " (.getMessage e)))))
 
 (defn- list-backups [project-id]
-  (let [page (.list (storage) (str root project-id) (into-array Storage$BlobListOption [(Storage$BlobListOption/currentDirectory)]))]
+  (let [page (.list (storage) (str @root project-id) (into-array Storage$BlobListOption [(Storage$BlobListOption/currentDirectory)]))]
     (let [data (seq (.iterateAll page))]
-       (sort-by :timestamp
+      (sort-by :timestamp
         (for [item data]
           (let [mapped (bean item)]
-            {:timestamp (make-timestamp (:name mapped)) :uri (str "gs://"(:bucket mapped) "/" (:name mapped))}))))))
+            { :id (:blobId mapped)
+              :name (:name mapped)
+              :bucket (:bucket mapped)
+              :timestamp (make-timestamp (:name mapped)) 
+              :uri (str "gs://" (:bucket mapped) "/" (:name mapped))}))))))
 
 (defn- last-backup [project-id]
   (last (list-backups project-id)))
+
+(defn- list-sub-directory [project-id folder]
+  (let [page (.list (storage) (str @root project-id) (into-array Storage$BlobListOption [(Storage$BlobListOption/prefix folder)]))]
+    (let [data (seq (.iterateAll page))]
+        (sort-by :name
+          (for [item data]
+            (let [mapped (bean item)]
+              { :id (:blobId mapped)
+                :name (:name mapped)
+                :uri (str "gs://" (:bucket mapped) "/" (:name mapped))}))))))
+
+(defn- delete-backup [project-id folder]
+  (let [contents (list-sub-directory project-id folder)]
+    (doseq [file contents]
+      (.delete (storage) (:id file) (into-array Storage$BlobSourceOption [])))))                              
+
+(defn create-backup-bucket []
+  (let [project-id (.getProjectId (g/load-credentials))]
+    (.create (storage) (bucket-info (str @root project-id)) (into-array Storage$BucketTargetOption []))))
+
+(defn deleting-your-backup-bucket-is-an-extremely-bad-idea  []
+  (let [project-id (.getProjectId (g/load-credentials))]
+    (let [backups (list-backups project-id)]
+      (doseq [backup backups]
+        (delete-backup project-id (:name backup)))
+      (Thread/sleep 5000)
+      (.delete (storage) (str @root project-id) (into-array Storage$BucketSourceOption [])))))
+
+(defn set-prefix [prefix]
+  (let [clean-prefix (clojure.string/replace (str prefix) #"[!@#$%^&*\\\/]" "")]
+    (reset! root (str "magma-" clean-prefix "-"))))
 
 (defn list-firestore-backups 
   ([]
@@ -102,11 +137,10 @@
 (defn backup-firestore 
   ([]
     (let [project-id (.getProjectId (g/load-credentials))]
-      (backup project-id (str "gs://" root project-id))))
-  ([bucket]
-    (backup (.getProjectId (g/load-credentials)) bucket))
-  ([project-id bucket]
-    (backup project-id bucket)))
+      (backup project-id (str "gs://" @root project-id))))
+  ([project-id]
+    (backup project-id (str "gs://" @root project-id))))
+  
 
 (defn restore-firestore 
   ([backup-uri]
@@ -125,4 +159,8 @@
       (Thread/sleep 60000)
       (restore-firestore uri))))
 
-;(into-array Storage$BucketTargetOption [])
+(defn deleting-your-backups-is-a-really-bad-idea 
+  ([backup-name]
+    (delete-backup (.getProjectId (g/load-credentials)) backup-name))
+  ([project-id backup-name]
+    (delete-backup project-id backup-name)))
