@@ -31,6 +31,8 @@ Whenever the `project-id` is omitted as an argument `magma` uses the `project-id
 (roll-back-firestore "project-id") ;for your safety magma waits 60 seconds before starting the roll back
 ```
 
+I'm currently using `magma` to backup my DB just before I deploy a change to my production API.
+
 ## License
 
 Copyright © 2020 Alexander Oloo
