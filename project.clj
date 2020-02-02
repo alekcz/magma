@@ -1,4 +1,4 @@
-(defproject alekcz/magma "0.2.0"
+(defproject alekcz/magma "0.3.0"
   :description "A Clojure library to back up your Firestore to Google Storage"
   :url "https://github.com/alekcz/magma"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
