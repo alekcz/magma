@@ -28,6 +28,8 @@
       (Thread/sleep short-wait)
       (magma/restore-firestore project-id)
       (Thread/sleep short-wait)
+      (magma/roll-back-firestore project-id)
+      (Thread/sleep short-wait)
       (let [backup-list (magma/list-firestore-backups)
             first-backup (first (magma/list-firestore-backups project-id))
             last-backup (magma/last-firestore-backup)]
