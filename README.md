@@ -4,7 +4,14 @@ A Clojure library to back up your Firestore to Google Storage
 
 ## Usage
 
+Whenever the `project-id` is omitted as an argument `magma` uses the `project-id` in the Google Credentials.
+`magma` use [alekcz/google-credentials](https://github.com/alekcz/google-credentials) to load Google Credentials from the `GOOGLE_APPLICATION_CREDENTIALS`
+
+
 ```clojure 
+
+[alekcz/magma "0.1.0"]
+
 (list-firestore-backups)
 (list-firestore-backups "project-id")
 
