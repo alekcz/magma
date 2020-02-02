@@ -12,7 +12,7 @@ Whenever the `project-id` is omitted as an argument `magma` uses the `project-id
 
 ```clojure 
 
-[alekcz/magma "0.1.0"]
+[alekcz/magma "0.3.0"]
 
 (require '[magma.core :as magma])
 
