@@ -24,8 +24,6 @@
             )
   (:gen-class))
 
-(t/zone "Africa/Johannesburg")
-
 (def root (atom "magma-"))
 
 (defn- storage ^Storage [] 

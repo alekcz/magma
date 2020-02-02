@@ -12,6 +12,7 @@
         project-id (.getProjectId (g/load-credentials))
         _ (magma/rename-root prefix)]
     (magma/create-backup-bucket)
+    (Thread/sleep short-wait)
 	  (f)
     (Thread/sleep long-wait)
     (magma/deleting-your-backup-bucket-is-an-extremely-bad-idea)
