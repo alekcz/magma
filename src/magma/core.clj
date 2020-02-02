@@ -107,12 +107,8 @@
 (defn create-backup-bucket 
   ([]
     (let [project-id (.getProjectId (g/load-credentials))]
-      (println project-id)
-      (println (g/load-credentials))
       (.create (storage) (bucket-info (str @root project-id)) (into-array Storage$BucketTargetOption []))))
   ([project-id]
-      (println project-id)
-      (println (g/load-credentials))
       (.create (storage) (bucket-info (str @root project-id)) (into-array Storage$BucketTargetOption []))))
 
 (defn deleting-your-backup-bucket-is-an-extremely-bad-idea  []
