@@ -13,7 +13,7 @@ jobs:
       run: lein deps
     - name: Run tests
       env: 
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
       run: lein test
     - name: Calculate coverage
       env: 
