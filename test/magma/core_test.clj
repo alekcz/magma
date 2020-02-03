@@ -5,7 +5,7 @@
             [clj-uuid :as uuid]))
 
 (def short-wait 5000)
-(def long-wait 30000)
+(def long-wait 20000)
 
 (defn fixture [f]
 	(let [prefix (uuid/v1)
@@ -26,13 +26,13 @@
       (Thread/sleep short-wait)
       (magma/backup-firestore)
       (Thread/sleep short-wait)
-      (magma/restore-firestore)
-      (Thread/sleep short-wait)
       (magma/roll-back-firestore)
       (Thread/sleep short-wait)
       (let [backup-list (magma/list-firestore-backups)
             first-backup (first (magma/list-firestore-backups))
             last-backup (magma/last-firestore-backup)]
+        (magma/restore-firestore (:uri first-backup))
+        (Thread/sleep short-wait)
         (is (= 2 (count backup-list)))
         (is (= last-backup (last backup-list)))
         (doseq [b backup-list]
