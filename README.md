@@ -8,6 +8,10 @@ A Clojure library to back up your Firestore to Google Storage
 
 All (except one) `magma` functions have multiple arities for convenience and to be CI/CD friendly. 
 
+Environment variables:
+1. GOOGLE_CLOUD_PROJECT contains the name of the project containing both firestore and the cloud storage
+2. 
+
 Whenever the `project-id` is omitted as an argument `magma` uses the `project-id` in the Google Credentials.
 `magma` uses [alekcz/google-credentials](https://github.com/alekcz/google-credentials) to load Google Credentials from the `GOOGLE_APPLICATION_CREDENTIALS`
 

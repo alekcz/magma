@@ -11,7 +11,7 @@
 	(let [prefix (uuid/v1)
         project-id (.getProjectId (g/load-credentials))
         _ (magma/rename-root prefix)]
-    (magma/create-backup-bucket project-id )
+    (magma/create-backup-bucket project-id)
     (Thread/sleep short-wait)
 	  (f)
     (Thread/sleep long-wait)

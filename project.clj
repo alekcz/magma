@@ -15,6 +15,7 @@
                     :exclusions [io.grpc/grpc-api]]
                   [io.grpc/grpc-api "1.27.0"]
                   [tick "0.4.23-alpha"]
-                  [danlentz/clj-uuid "0.1.9"]]
+                  [danlentz/clj-uuid "0.1.9"]
+                  [environ "1.1.0"]]
   :repl-options {:init-ns magma.core}
   :plugins  [[lein-cloverage "1.1.2"]])
