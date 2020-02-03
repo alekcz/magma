@@ -2,7 +2,8 @@
 
 A Clojure library to back up your Firestore to Google Storage
 
-![Clojure CI](https://github.com/alekcz/magma/workflows/Clojure%20CI/badge.svg)
+![Clojure CI](https://github.com/alekcz/magma/workflows/Clojure%20CI/badge.svg) [![codecov](https://codecov.io/gh/alekcz/magma/branch/master/graph/badge.svg)](https://codecov.io/gh/alekcz/magma)  
+
 
 ## Usage
 
