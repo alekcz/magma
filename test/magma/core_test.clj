@@ -9,9 +9,8 @@
 
 (defn fixture [f]
 	(let [prefix (uuid/v1)
-        project-id (.getProjectId (g/load-credentials))
         _ (magma/rename-root prefix)]
-    (magma/create-backup-bucket project-id)
+    (magma/create-backup-bucket)
     (Thread/sleep short-wait)
 	  (f)
     (Thread/sleep long-wait)
@@ -25,20 +24,20 @@
     (let [project-id (.getProjectId (g/load-credentials))]
       (magma/backup-firestore)
       (Thread/sleep short-wait)
-      (magma/backup-firestore project-id)
+      (magma/backup-firestore)
       (Thread/sleep short-wait)
-      (magma/restore-firestore project-id)
+      (magma/restore-firestore)
       (Thread/sleep short-wait)
-      (magma/roll-back-firestore project-id)
+      (magma/roll-back-firestore)
       (Thread/sleep short-wait)
       (let [backup-list (magma/list-firestore-backups)
-            first-backup (first (magma/list-firestore-backups project-id))
+            first-backup (first (magma/list-firestore-backups))
             last-backup (magma/last-firestore-backup)]
         (is (= 2 (count backup-list)))
         (is (= last-backup (last backup-list)))
         (doseq [b backup-list]
-          (is (clojure.string/includes? (:bucket b) (str @magma/root project-id))))
-        (magma/deleting-your-backups-is-a-really-bad-idea project-id (:name first-backup))
+          (is (clojure.string/includes? (:bucket b) (str @magma/root))))
+        (magma/deleting-your-backups-is-a-really-bad-idea (:name first-backup))
         (Thread/sleep short-wait)
         (magma/deleting-your-backups-is-a-really-bad-idea (:name last-backup))
         (Thread/sleep short-wait)
