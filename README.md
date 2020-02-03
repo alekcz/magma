@@ -6,15 +6,11 @@ A Clojure library to back up your Firestore to Google Storage
 
 ## Usage
 
-All (except one) `magma` functions have multiple arities for convenience and to be CI/CD friendly. 
-
 Environment variables:
 1. GOOGLE_CLOUD_PROJECT contains the name of the project containing both firestore and the cloud storage
-2. 
+2. GOOGLE_APPLICATION_CREDENTIALS contains the `.json` credential for the service account being used. 
 
-Whenever the `project-id` is omitted as an argument `magma` uses the `project-id` in the Google Credentials.
 `magma` uses [alekcz/google-credentials](https://github.com/alekcz/google-credentials) to load Google Credentials from the `GOOGLE_APPLICATION_CREDENTIALS`
-
 
 ```clojure 
 
@@ -24,28 +20,21 @@ Whenever the `project-id` is omitted as an argument `magma` uses the `project-id
 
 
 (magma/create-backup-bucket)
-(magma/create-backup-bucket "project-id")
 ;by default the root is called magma-<project-id>. 
 ;The bucket is called named after the root
 
 (magma/list-firestore-backups)
-(magma/list-firestore-backups "project-id")
 
 (magma/last-firestore-backup)
-(magma/last-firestore-backup "project-id")
 
 (magma/backup-firestore)
 (magma/backup-firestore "gs://bucket-name")
-(magma/backup-firestore "project-id" "gs://bucket-name")
 
 (magma/restore-firestore "gs://bucket-name/yyyy-MM-ddTHH:mm:ss.SSS")
-(magma/restore-firestore "project-id" "gs://bucket-name/yyyy-MM-ddTHH:mm:ss.SSS")
 
 (magma/roll-back-firestore) ;for your safety magma waits 60 seconds before starting the roll back
-(magma/roll-back-firestore "project-id") ;for your safety magma waits 60 seconds before starting the roll back
 
 (magma/deleting-your-backups-is-a-really-bad-idea "yyyy-MM-ddTHH:mm:ss_SSS")
-(magma/deleting-your-backups-is-a-really-bad-idea "project-id" "yyyy-MM-ddTHH:mm:ss_SSS")
 
 ;Renaming the root
 (magma/rename-root "namespace")
