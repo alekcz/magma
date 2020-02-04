@@ -63,18 +63,14 @@
     (t/instant)))
 
 (defn- backup [bucket-uri]
-    (try 
-      (let [client (admin-client)
-            name  (DatabaseName/of (project-id) "firestore")]
-        (.exportDocuments client (export-request (.toString name) bucket-uri)))
-      (catch Exception e (str "Caught exception: " (.getMessage e)))))
-
+  (let [client (admin-client)
+        name  (DatabaseName/of (project-id) "firestore")]
+    (.exportDocuments client (export-request (.toString name) bucket-uri))))
+  
 (defn- restore [backup-uri]
-    (try 
-      (let [client (admin-client)
-            name  (DatabaseName/of (project-id) "firestore")]
-        (.importDocuments client (import-request (.toString name) backup-uri)))
-      (catch Exception e (str "Caught exception: " (.getMessage e)))))
+  (let [client (admin-client)
+        name  (DatabaseName/of (project-id) "firestore")]
+    (.importDocuments client (import-request (.toString name) backup-uri))))
 
 (defn- list-backups []
   (let [page (.list (storage) (str @root (project-id)) (into-array Storage$BlobListOption [(Storage$BlobListOption/currentDirectory)]))]
