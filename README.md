@@ -17,7 +17,7 @@ Environment variables:
 
 ```clojure 
 
-[alekcz/magma "0.3.0"]
+[alekcz/magma "1.0.0"]
 
 (require '[magma.core :as magma])
 
